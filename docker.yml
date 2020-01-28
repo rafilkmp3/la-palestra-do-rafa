@@ -1,0 +1,17 @@
+---
+    # docker.yml
+    
+    - name: Install Docker 
+      hosts: "all"
+      become: true
+      vars:
+        ansible_python_interpreter: /usr/bin/python3
+      roles:
+        - role: "nickjj.docker"
+          tags: ["docker"]
+          docker__version: ""
+          docker__state: "present"
+          docker__compose_version: ""
+          docker__users: ["ubuntu"]
+          docker__pip_virtualenv: "/usr/local/lib/docker/virtualenv"
+

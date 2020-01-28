@@ -1,0 +1,23 @@
+- name: Run Web App using a flask-app directory
+  hosts: all
+  become: true 
+  gather_facts: no
+  tasks:
+    - set_fact: 
+        remote_compose_dir=/tmp/ansible-docker-service
+        local_compose_dir=flask-app
+    - file: 
+        path: "{{ remote_compose_dir }}"
+        state: directory
+    - name: Upload docker-compose files
+      synchronize: 
+        src: "{{ local_compose_dir }}"
+        dest: "{{ remote_compose_dir }}"
+
+    - name: Create and start services
+      docker_compose:
+        project_src: "{{ remote_compose_dir }}/{{ local_compose_dir }}"
+      register: output
+
+    - debug:
+        var: output
